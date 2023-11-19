@@ -97,8 +97,15 @@ class XpmImage(object):
         if colour == self.transparent_colour:
             return 'None'
         else:
-            return '#{}{}{}{}'.format(
-                *['{:02x}'.format(c) for c in (colour[3], colour[0], colour[1], colour[2])])
+            str = '#'
+            if (type(colour) is tuple):
+                if (len(colour) == 4):
+                    str += '{3:02x}'
+                for d in range(len(colour) - (len(colour) == 4)):
+                    str += '{{{0}:02x}}'.format(d)
+                return str.format(*[c for c in colour])
+            else:
+                return '#{0:02x}'.format(colour)
 
     def make_pixels(self):
         for y in range(self.ysize):
@@ -132,8 +139,8 @@ if __name__ == '__main__':
         help='XPM files are valid C code creating a variable representing an image. The name of this variable', default='picture')
     args = PARSER.parse_args()
     image = PIL.Image.open(args.file)
+    
     xpm_bytes = pil_save(
-        image,
         variable_name=args.variable_name.encode('ascii'))
 
     if sys.version_info.major >= 3:

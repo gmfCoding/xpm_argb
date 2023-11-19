@@ -1,5 +1,7 @@
-# xpm
 
+> **FORK:** This is a fork of [xpm](https://github.com/talwrii/xpm) that brings transparency to the table (literally and figuratively)
+
+# XPM
 A native python library for producing XPM files from raster images.
 For parsing XPM files I recommend PIL.
 
@@ -13,21 +15,26 @@ Though for this use case you might prefer imagemagick.
 
 ### Python code
 
-Using PIL:
+Creates a 3x3 image of black and white pixels with varying transparency
 
-    image = PIL.Image.open(args.file)
-    xpm_string = pil_save(image, variable_name=args.variable_name)
-    print(xpm_string)
+	import xpm
+	import sys
 
-Given a dictionary mapping pixels to RGB colours:
-
-    black = (0, 0, 0)
-    white = (255, 255, 255)
-    image = [
-          [black, white, black],
-          [white, black, white],
-          [black, white, black]]
-    pixels = dict( ((i, j), colour)
-        for j, row in enumerate(image)
-            for i, colour in enumerate(row))
-    xpm_im = xpm.XpmImage((3, 3), pixels).make_image
+	# RGBA IN
+	# Also supports RGB, RG and RED (grayscale)
+	# Make sure your parser supports those options!
+	black = (0, 0, 0, 127)
+	white = (255, 255, 255, 192)
+	image = [
+			[black, white, black],
+			[white, black, white],
+			[black, white, black]]
+	pixels = dict( ((i, j), colour)
+		for j, row in enumerate(image)
+			for i, colour in enumerate(row))
+	xpm_im = xpm.XpmImage((3, 3), pixels).make_image()
+	# XPM ARGB out
+	if sys.version_info.major >= 3:
+		sys.stdout.buffer.write(xpm_im)
+	else:
+		sys.stdout.write(xpm_im)
