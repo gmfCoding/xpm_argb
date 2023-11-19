@@ -140,7 +140,7 @@ if __name__ == '__main__':
     args = PARSER.parse_args()
     image = PIL.Image.open(args.file)
     
-    xpm_bytes = pil_save(
+    xpm_bytes = pil_save(image,
         variable_name=args.variable_name.encode('ascii'))
 
     if sys.version_info.major >= 3:
