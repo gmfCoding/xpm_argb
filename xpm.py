@@ -21,7 +21,7 @@ def pil_save(pil_image, variable_name=b'picture'):
 class XpmImage(object):
     @classmethod
     def from_pil(cls, pil_image, variable_name=b'picture'):
-        pil_image = pil_image.convert('RGB')
+        pil_image = pil_image.convert('RGBA')
         transparent_colour = pil_image.info.get('transparency')
         return cls(pil_image.size, pil_image.load(), variable_name, transparent_colour)
 
@@ -97,9 +97,8 @@ class XpmImage(object):
         if colour == self.transparent_colour:
             return 'None'
         else:
-            return '#{}{}{}'.format(
-                *['{:02x}'.format(c) for c in colour]
-                ).encode('ascii')
+            return '#{}{}{}{}'.format(
+                *['{:02x}'.format(c) for c in (colour[3], colour[0], colour[1], colour[2])])
 
     def make_pixels(self):
         for y in range(self.ysize):
