@@ -82,7 +82,7 @@ class XpmImage(object):
     def make_info(self):
         return ['"{} {} {} {}"'.format(
             self.xsize, self.ysize,
-            len(self.colours), 1).encode('ascii')]
+            len(self.colours), self.colour_width).encode('ascii')]
 
     def make_colour_table(self):
         for colour in self.colours:

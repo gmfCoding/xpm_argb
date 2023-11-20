@@ -25,10 +25,14 @@ Creates a 3x3 image of black and white pixels with varying transparency
 	# Make sure your parser supports those options!
 	black = (0, 0, 0, 127)
 	white = (255, 255, 255, 192)
+
+	# image data needs to be in the format of list of list of tuples
 	image = [
 			[black, white, black],
 			[white, black, white],
 			[black, white, black]]
+
+	# pixel data needs to be in the format of key (x,y), value: (r,g,b) dict
 	pixels = dict( ((i, j), colour)
 		for j, row in enumerate(image)
 			for i, colour in enumerate(row))
