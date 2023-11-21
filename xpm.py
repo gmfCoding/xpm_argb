@@ -14,7 +14,7 @@ import string
 COLOUR_DIGITS = bytes((string.digits + string.ascii_lowercase).encode('ascii'))
 
 def pil_save(pil_image, inverse_alpha=False, variable_name=b'picture'):
-    formatter = XpmImage.from_pil(pil_image, inverse_alpha, ariable_name)
+    formatter = XpmImage.from_pil(pil_image, inverse_alpha, variable_name)
     return formatter.make_image()
 
 
@@ -25,7 +25,7 @@ class XpmImage(object):
         transparent_colour = pil_image.info.get('transparency')
         return cls(pil_image.size, pil_image.load(), inverse_alpha, variable_name, transparent_colour)
 
-    def __init__(self, size, pixels, inverse_alpha, variable_name=b'picture', transparent_colour=None):
+    def __init__(self, size, pixels, inverse_alpha=False, variable_name=b'picture', transparent_colour=None):
         "Pixels is a dictionary mapping x,y coordinates to rgba tuples"
         self.xsize, self.ysize = size
         self.inverse_alpha = inverse_alpha
@@ -100,9 +100,12 @@ class XpmImage(object):
         else:
             str = '#'
             if (type(colour) is tuple):
+                colour = list(colour)
                 if (len(colour) == 4):
-                    colour[3] = 255 - colour[3]
+                    if (self.inverse_alpha):
+                        colour[3] = 255 - colour[3]
                     str += '{3:02x}'
+                colour = tuple(colour)
                 for d in range(len(colour) - (len(colour) == 4)):
                     str += '{{{0}:02x}}'.format(d)
                 return str.format(*[c for c in colour])
@@ -144,7 +147,7 @@ if __name__ == '__main__':
     args = PARSER.parse_args()
     image = PIL.Image.open(args.file)
     
-    xpm_bytes = pil_save(image, alpha_inversion=args.inverse_alpha,
+    xpm_bytes = pil_save(image, inverse_alpha=args.inverse_alpha,
         variable_name=args.variable_name.encode('ascii'))
 
     if sys.version_info.major >= 3:

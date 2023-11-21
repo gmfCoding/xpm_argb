@@ -36,7 +36,8 @@ Creates a 3x3 image of black and white pixels with varying transparency
 	pixels = dict( ((i, j), colour)
 		for j, row in enumerate(image)
 			for i, colour in enumerate(row))
-	xpm_im = xpm.XpmImage((3, 3), pixels).make_image()
+	# resolution, pixels, invert alpha
+	xpm_im = xpm.XpmImage((3, 3), pixels, False).make_image()
 	# XPM ARGB out
 	if sys.version_info.major >= 3:
 		sys.stdout.buffer.write(xpm_im)
